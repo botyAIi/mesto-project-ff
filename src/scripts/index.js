@@ -1,3 +1,4 @@
+// импорты
 import {likedBtn, clickImage, deleteCard, createCard, initialCards} from './components/cards.js';
 import {closeModal, openModal} from './components/modal.js';
 import '../pages/index.css';
@@ -6,7 +7,7 @@ const listCards = document.querySelector('.places__list');
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
 // окна popup в разных констатах
-const popups = document.querySelectorAll('.popup')
+const popups = document.querySelectorAll('.popup') // псевдомассив со всеми popup
 const popupEditProfile = document.querySelector('.popup_type_edit');
 const popupAddCard = document.querySelector('.popup_type_new-card');
 const popupCardImage = document.querySelector('.popup_type_image');
@@ -42,7 +43,6 @@ function addNewCard(placeName, placeLink) {
   const card = [];
   card.name = placeName.value;
   card.link = placeLink.value;
-  console.log(card);
   listCards.prepend(createCard(card, likedBtn, deleteCard, clickImage, popupCardImage));
 }
 
