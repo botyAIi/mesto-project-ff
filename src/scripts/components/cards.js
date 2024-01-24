@@ -1,6 +1,8 @@
-// массив обьектов
-import { cardTemplate, popupCardImage } from "../index";
+// начальный массив карточек
 import { openModal } from "./modal";
+
+// Темплейт карточки
+const cardTemplate = document.querySelector('#card-template').content;
 
 export const initialCards = [
     {
@@ -28,8 +30,9 @@ export const initialCards = [
       link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
     }
 ];
+
 //функция создания карточки
-export function createCard(card) {
+export function createCard(card, likedBtn, deleteCard, clickImage, popupImg) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); 
   const cardImg = cardElement.querySelector('.card__image');
 
@@ -37,13 +40,7 @@ export function createCard(card) {
   cardImg.alt = card.name;
   cardElement.querySelector('.card__title').textContent = card.name;
   
-  cardImg.addEventListener('click', () => {
-    const image = popupCardImage.querySelector('.popup__image');
-    image.src = cardImg.src;
-    image.alt = cardImg.alt;
-    popupCardImage.querySelector('.popup__caption').textContent = cardImg.alt;
-    openModal(popupCardImage);
-  })
+  cardImg.addEventListener('click', () => clickImage(popupImg, cardImg));
 
   cardElement.addEventListener('click', likedBtn);
 
@@ -51,12 +48,14 @@ export function createCard(card) {
 
   return cardElement
 };
+
 //функция удаления карточки
 export function deleteCard(evt) {
   if (evt.target.classList.contains('card__delete-button')) {
     evt.currentTarget.remove();
   }
 };
+
 //функция лайка карточки
 export function likedBtn(evt) {
   if (evt.target.classList.contains('card__like-button')) {
@@ -64,3 +63,11 @@ export function likedBtn(evt) {
   }
 };
 
+//функция открытия карточки 
+export function clickImage(popup, cardImg) {
+  const image = popup.querySelector('.popup__image')
+  image.src = cardImg.src;
+  image.alt = cardImg.alt;
+  popup.querySelector('.popup__caption').textContent = cardImg.alt;
+  openModal(popup);
+}

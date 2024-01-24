@@ -1,19 +1,19 @@
+
+function closeByEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_is-opened');
+    openedPopup.classList.remove('popup_is-opened')
+  }
+}
+
 function openModal(popup) {
   popup.classList.add('popup_is-opened');
-  document.body.addEventListener('keydown', (esc) => {
-    if (esc.key === 'Escape') {
-      popup.classList.remove('popup_is-opened');
-      document.body.removeEventListener;
-    }
-  });
+  document.addEventListener('keydown', closeByEscape);
 };
 
-function closeModal(evt) {
-  if (evt.target.classList.contains('popup__close') || 
-      evt.target.classList.contains('popup_is-opened')) {
-        evt.stopPropagation();
-        evt.currentTarget.classList.remove('popup_is-opened');
-   }
-}; 
+function closeModal(popup) {
+  popup.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', closeByEscape);
+};
   
 export {openModal, closeModal};

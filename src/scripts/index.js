@@ -1,62 +1,74 @@
-import {initialCards, createCard} from './components/cards.js';
+import {likedBtn, clickImage, deleteCard, createCard, initialCards} from './components/cards.js';
 import {closeModal, openModal} from './components/modal.js';
 import '../pages/index.css';
-// Темплейт карточки
-export const cardTemplate = document.querySelector('#card-template').content;
 // DOM узлы
 const listCards = document.querySelector('.places__list');
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
 // окна popup в разных констатах
+const popups = document.querySelectorAll('.popup')
 const popupEditProfile = document.querySelector('.popup_type_edit');
 const popupAddCard = document.querySelector('.popup_type_new-card');
-export const popupCardImage = document.querySelector('.popup_type_image');
-// forms
+const popupCardImage = document.querySelector('.popup_type_image');
 // формы профиля
 const editProfileForm = popupEditProfile.querySelector('.popup__form');
 const nameInput = editProfileForm.querySelector('.popup__input_type_name');
 const jobInput = editProfileForm.querySelector('.popup__input_type_description');
-nameInput.value = profileTitle.textContent;
-jobInput.value = profileDesc.textContent; 
+// глобальные константы для формы карточки
+const addCardForm = popupAddCard.querySelector('.popup__form');
+const placeName = addCardForm.querySelector('.popup__input_type_card-name');
+const placeLink = addCardForm.querySelector('.popup__input_type_url');
+// кнопки открытия popup'ов
+const buttonEditProfile = document.querySelector('.profile__edit-button');
+const buttonAddCard = document.querySelector('.profile__add-button');
+
 //функция submit для Профиля
 function uploadDataProfile(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDesc.textContent = jobInput.value;
-  popupEditProfile.classList.remove('popup_is-opened');
+  closeModal(popupEditProfile);
 }
 editProfileForm.addEventListener('submit', uploadDataProfile);
 
-// фунцкия submit для добавления карточки
-const addCardForm = popupAddCard.querySelector('.popup__form');
-const placeName = addCardForm.querySelector('.popup__input_type_card-name');
-const placeLink = addCardForm.querySelector('.popup__input_type_url');
+// вывод карточек из массива
+initialCards.forEach((card) => {
+  listCards.append(createCard(card, likedBtn, deleteCard, clickImage, popupCardImage));
+});
 
-function addNewCard(nameCard, linkCard) {
-  initialCards.unshift({name: nameCard.value, link: linkCard.value});
-  console.log(initialCards);
-  listCards.prepend(createCard(initialCards[0]));
-  nameCard.value = '';
-  linkCard.value = '';
+// фунцкия submit для добавления карточки
+
+function addNewCard(placeName, placeLink) {
+  const card = [];
+  card.name = placeName.value;
+  card.link = placeLink.value;
+  console.log(card);
+  listCards.prepend(createCard(card, likedBtn, deleteCard, clickImage, popupCardImage));
 }
 
 addCardForm.addEventListener('submit', (evt) =>{
-  evt.preventDefault()
+  evt.preventDefault();
   addNewCard(placeName, placeLink);
+  addCardForm.reset();
+  closeModal(popupAddCard);
 });
-// кнопки открытия popup'ов
-const buttonEditProfile = document.querySelector('.profile__edit-button');
-const buttonAddCard = document.querySelector('.profile__add-button');
-// вывод карточек из массива
-initialCards.forEach((card) => {
-  listCards.append(createCard(card));
-});
+
 //обработчики для popup
 // открытие 
-buttonEditProfile.addEventListener('click',() => openModal(popupEditProfile));
-buttonAddCard.addEventListener('click', () => openModal(popupAddCard));
+buttonEditProfile.addEventListener('click', () => {
+    nameInput.value = profileTitle.textContent;
+    jobInput.value = profileDesc.textContent; 
+    openModal(popupEditProfile)
+  }); 
+buttonAddCard.addEventListener('click', () => openModal(popupAddCard)); 
 // закрытие
-popupEditProfile.addEventListener('click', closeModal);
-popupAddCard.addEventListener('click', closeModal);
-popupCardImage.addEventListener('click', closeModal);
+popups.forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains('popup_is-opened')) {
+      closeModal(popup);
+    }
+    if (evt.target.classList.contains('popup__close')) {
+      closeModal(popup);
+    } 
+})});
 
