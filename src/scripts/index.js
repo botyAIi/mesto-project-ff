@@ -36,6 +36,8 @@ function addNewCard(nameCard, linkCard) {
   initialCards.unshift({name: nameCard.value, link: linkCard.value});
   console.log(initialCards);
   listCards.prepend(createCard(initialCards[0]));
+  nameCard.value = '';
+  linkCard.value = '';
 }
 
 addCardForm.addEventListener('submit', (evt) =>{
