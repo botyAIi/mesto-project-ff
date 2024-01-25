@@ -1,24 +1,32 @@
+
 // импорты
-import {likedBtn, clickImage, deleteCard, createCard, initialCards} from './components/cards.js';
+import {likedBtn, deleteCard, createCard, initialCards} from './components/cards.js';
 import {closeModal, openModal} from './components/modal.js';
 import '../pages/index.css';
+
 // DOM узлы
 const listCards = document.querySelector('.places__list');
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
+
 // окна popup в разных констатах
 const popups = document.querySelectorAll('.popup') // псевдомассив со всеми popup
 const popupEditProfile = document.querySelector('.popup_type_edit');
 const popupAddCard = document.querySelector('.popup_type_new-card');
 const popupCardImage = document.querySelector('.popup_type_image');
+const popupImage = popupCardImage.querySelector('.popup__image');
+const popupImageName = popupCardImage.querySelector('.popup__caption');
+
 // формы профиля
 const editProfileForm = popupEditProfile.querySelector('.popup__form');
 const nameInput = editProfileForm.querySelector('.popup__input_type_name');
 const jobInput = editProfileForm.querySelector('.popup__input_type_description');
+
 // глобальные константы для формы карточки
 const addCardForm = popupAddCard.querySelector('.popup__form');
 const placeName = addCardForm.querySelector('.popup__input_type_card-name');
 const placeLink = addCardForm.querySelector('.popup__input_type_url');
+
 // кнопки открытия popup'ов
 const buttonEditProfile = document.querySelector('.profile__edit-button');
 const buttonAddCard = document.querySelector('.profile__add-button');
@@ -30,6 +38,7 @@ function uploadDataProfile(evt) {
   profileDesc.textContent = jobInput.value;
   closeModal(popupEditProfile);
 }
+
 editProfileForm.addEventListener('submit', uploadDataProfile);
 
 // вывод карточек из массива
@@ -38,7 +47,6 @@ initialCards.forEach((card) => {
 });
 
 // фунцкия submit для добавления карточки
-
 function addNewCard(placeName, placeLink) {
   const card = [];
   card.name = placeName.value;
@@ -54,6 +62,16 @@ addCardForm.addEventListener('submit', (evt) =>{
 });
 
 //обработчики для popup
+
+//функция открытия карточки (как аргумент функции createCard)
+function clickImage(evt) {
+  const imageCard = evt.target;
+  popupImage.src = imageCard.src;
+  popupImage.alt = imageCard.alt;
+  popupImageName.textContent = imageCard.alt;
+  openModal(popupCardImage);
+}
+
 // открытие 
 buttonEditProfile.addEventListener('click', () => {
     nameInput.value = profileTitle.textContent;
@@ -62,6 +80,7 @@ buttonEditProfile.addEventListener('click', () => {
   }); 
 buttonAddCard.addEventListener('click', () => openModal(popupAddCard)); 
 // закрытие
+
 popups.forEach((popup) => {
   popup.addEventListener('mousedown', (evt) => {
     if (evt.target.classList.contains('popup_is-opened')) {

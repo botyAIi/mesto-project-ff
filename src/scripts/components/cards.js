@@ -1,6 +1,3 @@
-// начальный массив карточек
-import { openModal } from "./modal";
-
 // Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
 
@@ -32,7 +29,7 @@ export const initialCards = [
 ];
 
 //функция создания карточки
-export function createCard(card, likedBtn, deleteCard, clickImage, popupImg) {
+export function createCard(card, likedBtn, deleteCard, clickImage) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); 
   const cardImg = cardElement.querySelector('.card__image');
 
@@ -40,7 +37,7 @@ export function createCard(card, likedBtn, deleteCard, clickImage, popupImg) {
   cardImg.alt = card.name;
   cardElement.querySelector('.card__title').textContent = card.name;
   
-  cardImg.addEventListener('click', () => clickImage(popupImg, cardImg));
+  cardImg.addEventListener('click', clickImage);
 
   cardElement.addEventListener('click', likedBtn);
 
@@ -63,11 +60,3 @@ export function likedBtn(evt) {
   }
 };
 
-//функция открытия карточки 
-export function clickImage(popup, cardImg) {
-  const image = popup.querySelector('.popup__image')
-  image.src = cardImg.src;
-  image.alt = cardImg.alt;
-  popup.querySelector('.popup__caption').textContent = cardImg.alt;
-  openModal(popup);
-}
