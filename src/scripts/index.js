@@ -57,11 +57,9 @@ function uploadDataProfile(evt) {
   evt.preventDefault();
   renderLoading(true, popupEditProfile)
   uploadInfo(nameInput.value, jobInput.value)
-    .then(info => {
-        profileTitle.textContent = nameInput.value;
-        profileDesc.textContent = jobInput.value;
-        info.name = nameInput.value;
-        info.about = jobInput.value;
+  .then(info => {
+        profileTitle.textContent = info.name;
+        profileDesc.textContent = info.about;
       })
     .catch(err => console.log(err))
     .finally(() => {

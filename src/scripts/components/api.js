@@ -30,7 +30,11 @@ export const getInitialProfileInfo = () => {
 export function uploadInfo(name, bio) {
   return fetch(`${apiConfig.baseUrl}/users/me`, {
     method: 'PATCH',
-    headers: apiConfig.headers
+    headers: apiConfig.headers,
+    body: JSON.stringify({
+      name: name,
+      about: bio
+    })
     })
     .then(res => checkStatus(res))
 }
