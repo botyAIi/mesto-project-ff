@@ -23,7 +23,7 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 };
-// обект со свойствами удаленяемой карточки 
+// обект со свойствами удаленяемой карточки
 let cardForDelete = {};
 
 // DOM узлы
@@ -41,10 +41,11 @@ const popupCardImage = document.querySelector(".popup_type_image");
 const popupCardDelete = document.querySelector(".popup_type_card-delete");
 
 // кнопки попапов
-const popupCardDeleteButton = popupCardDelete.querySelector('.popup__button');
-const popupAddCardButton = popupAddCard.querySelector('.popup__button');
-const popupUpdateAvatarButton = popupUpdateAvatar.querySelector('.popup__button');
-const popupEditProfileButton = popupEditProfile.querySelector('.popup__button')
+const popupCardDeleteButton = popupCardDelete.querySelector(".popup__button");
+const popupAddCardButton = popupAddCard.querySelector(".popup__button");
+const popupUpdateAvatarButton =
+  popupUpdateAvatar.querySelector(".popup__button");
+const popupEditProfileButton = popupEditProfile.querySelector(".popup__button");
 
 // элементы попапа карточки
 const popupImage = popupCardImage.querySelector(".popup__image");
