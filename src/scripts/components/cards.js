@@ -1,58 +1,71 @@
 // Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
+const cardTemplate = document.querySelector("#card-template").content;
 
 //функция создания карточки
-export function createCard(card, clickImage, info, unlikedCard, likedCard, openDeleteCardPopup, submitDelete, popupCardDelete) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); 
-  const cardImg = cardElement.querySelector('.card__image');
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-  const likeScore = cardElement.querySelector('.card__like-score');
-  const cardTitle = cardElement.querySelector('.card__title');
-  const cardLike = cardElement.querySelector('.card__like-button');
-  
-    if (!(card.owner._id === info._id)) {
-      deleteButton.remove();
-    }
+export function createCard(
+  card,
+  handleImageClick,
+  currentUser,
+  onLike,
+  likeFunc,
+  unlikeFunc,
+  openDeleteConfirmationPopup
+) {
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
+  const cardImg = cardElement.querySelector(".card__image");
+  const deleteButton = cardElement.querySelector(".card__delete-button");
+  const likeScore = cardElement.querySelector(".card__like-score");
+  const cardTitle = cardElement.querySelector(".card__title");
+  const cardLikeButton = cardElement.querySelector(".card__like-button");
 
-    if (card.likes.find(likeProf => likeProf._id === info._id)) {
-      cardLike.classList.add('card__like-button_is-active');
-    }
-    
+  if (card.owner._id !== currentUser._id) {
+    deleteButton.remove();
+  }
+
+  const isLiked = card.likes.find(
+    (likeUser) => likeUser._id === currentUser._id
+  );
+
+  if (isLiked) {
+    cardLikeButton.classList.add("card__like-button_is-active");
+  }
+
   cardImg.src = card.link;
   cardImg.alt = card.name;
   cardTitle.textContent = card.name;
   likeScore.textContent = card.likes.length;
 
-  
-  cardImg.addEventListener('click', clickImage);
+  cardImg.addEventListener("click", () => handleImageClick(card));
 
-  cardElement.addEventListener('click', (evt) => { // реализация лайков и их количетсво
-    if ((evt.target.classList.contains('card__like-button'))) {
-      if (!(evt.target.classList.contains('card__like-button_is-active'))) {
-        evt.target.classList.add('card__like-button_is-active');
-        ++likeScore.textContent;
-        likedCard(card._id)
-          .then(card => likeScore.textContent = card.likes.length)
-          .catch(err => console.log(err))
-          .finally(card => likeScore.textContent = card.likes.length);
-      } else {
-        evt.target.classList.remove('card__like-button_is-active');
-        likeScore.textContent -= 1;
-        unlikedCard(card._id)
-          .then(card => likeScore.textContent = card.likes.length)
-          .catch(err => console.log(err))
-          .finally(card => likeScore.textContent = card.likes.length);
-      }
-}});
+  cardLikeButton.addEventListener("click", () =>
+    onLike(likeFunc, unlikeFunc, card, cardLikeButton, likeScore)
+  );
 
-deleteButton.addEventListener('click', () => { // реализация слушателя по карточке
-  openDeleteCardPopup(); 
-  submitDelete(card, cardElement);
-});
+  deleteButton.addEventListener("click", () =>
+    openDeleteConfirmationPopup(card, cardElement)
+  );
   return cardElement;
-};
+}
 
 //функция удаления карточки из DOM
 export function deleteCardFromDOM(cardElement) {
   cardElement.remove();
-};
+}
+
+export function onLike(likeFunc, unlikeFunc, card, cardLikeButton, likeScore) {
+  if (!cardLikeButton.classList.contains("card__like-button_is-active")) {
+    likeFunc(card._id)
+      .then((card) => {
+        cardLikeButton.classList.add("card__like-button_is-active");
+        likeScore.textContent = card.likes.length;
+      })
+      .catch((err) => console.log(err));
+  } else {
+    unlikeFunc(card._id)
+      .then((card) => {
+        cardLikeButton.classList.remove("card__like-button_is-active");
+        likeScore.textContent = card.likes.length;
+      })
+      .catch((err) => console.log(err));
+  }
+}
