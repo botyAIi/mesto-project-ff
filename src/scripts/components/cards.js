@@ -37,8 +37,9 @@ export function createCard(
 
   cardImg.addEventListener("click", () => handleImageClick(card));
 
-  cardLikeButton.addEventListener("click", () =>
-    onLike(likeFunc, unlikeFunc, card, cardLikeButton, likeScore)
+  cardLikeButton.addEventListener(
+    "click",
+    () => onLike(likeFunc, unlikeFunc, card, cardLikeButton, likeScore) // по заданию импорты происходят только в index.js, было бы не плохо если показал бы как напрямую использовать их в функции лайков
   );
 
   deleteButton.addEventListener("click", () =>

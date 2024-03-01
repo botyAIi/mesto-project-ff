@@ -16,7 +16,7 @@ function closeModal(popup) {
 }
 
 // обработчик закрытия popup'ов
-function handleClosePopup(evt) {
+function handleClosePopupByClick(evt) {
   if (
     evt.target.classList.contains("popup_is-opened") ||
     evt.target.classList.contains("popup__close")
@@ -25,4 +25,4 @@ function handleClosePopup(evt) {
   }
 }
 
-export { openModal, closeModal, handleClosePopup };
+export { openModal, closeModal, handleClosePopupByClick };

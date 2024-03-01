@@ -1,6 +1,11 @@
 // импорты
 import { createCard, deleteCardFromDOM, onLike } from "./components/cards.js";
-import { closeModal, handleClosePopup, openModal } from "./components/modal.js";
+import {
+  closeModal,
+  handleClosePopup,
+  handleClosePopupByClick,
+  openModal,
+} from "./components/modal.js";
 import { clearValidation, enableValidation } from "./components/validation.js";
 import {
   getInitialCards,
@@ -126,11 +131,9 @@ function openDeleteConfirmationPopup(card, currentElement) {
   cardForDelete.id = card._id;
   cardForDelete.element = currentElement;
   openModal(popupCardDelete);
-  cardDeleteForm.addEventListener("submit", deleteCurrentCard);
 }
 
-// обработчик сабмита для подтверждения (спасибо огромное за комментарии по коду)
-// думал о том чтобы так же реализовать, но не понимал как это должно быть
+// обработчик сабмита для подтверждения
 
 function deleteCurrentCard(evt) {
   evt.preventDefault();
@@ -144,7 +147,6 @@ function deleteCurrentCard(evt) {
     .finally(() => {
       renderDeleting(false, popupCardDeleteButton);
     });
-  cardDeleteForm.removeEventListener("submit", deleteCurrentCard);
 }
 
 // доработка UX
@@ -216,12 +218,13 @@ Promise.all([getInitialCards(), getInitialProfileInfo()])
 // вешаем слушатель закрытия на все попапы
 
 popups.forEach((popup) =>
-  popup.addEventListener("mousedown", handleClosePopup)
+  popup.addEventListener("mousedown", handleClosePopupByClick)
 );
 
 // слушатели форм для submit
 editProfileForm.addEventListener("submit", handleProfileEditFormSubmit);
 editAvatarForm.addEventListener("submit", updateAvatarSubmit);
+cardDeleteForm.addEventListener("submit", deleteCurrentCard);
 
 // слушатели для открытия попапов
 buttonEditProfile.addEventListener("click", openEditProfile);

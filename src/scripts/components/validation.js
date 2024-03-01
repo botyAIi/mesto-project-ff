@@ -31,23 +31,21 @@ function hasInvalidInput(inputList) {
   });
 }
 
-function disableButton(formElement, config) {
-  const submitButton = formElement.querySelector(config.submitButtonSelector);
+function disableButton(submitButton, config) {
   submitButton.classList.add(config.inactiveButtonClass);
   submitButton.disabled = true;
 }
 
-function activeButton(formElement, config) {
-  const submitButton = formElement.querySelector(config.submitButtonSelector);
+function enableButton(submitButton, config) {
   submitButton.classList.remove(config.inactiveButtonClass);
   submitButton.disabled = false;
 }
 
-function toggleButtonState(inputList, formElement, config) {
+function toggleButtonState(inputList, submitButton, config) {
   if (hasInvalidInput(inputList)) {
-    disableButton(formElement, config);
+    disableButton(submitButton, config);
   } else {
-    activeButton(formElement, config);
+    enableButton(submitButton, config);
   }
 }
 
@@ -55,11 +53,12 @@ function setEventListeners(formElement, config) {
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputSelector)
   );
-  toggleButtonState(inputList, formElement, config);
+  const submitButton = formElement.querySelector(config.submitButtonSelector);
+  toggleButtonState(inputList, submitButton, config);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
       checkInputValidity(formElement, inputElement, config);
-      toggleButtonState(inputList, formElement, config);
+      toggleButtonState(inputList, submitButton, config);
     });
   });
 }
@@ -75,11 +74,11 @@ export function enableValidation(config) {
 // очистка валидации полей форм
 export function clearValidation(formElement, config) {
   const inputElements = formElement.querySelectorAll(config.inputSelector);
+  const submitButton = formElement.querySelector(config.submitButtonSelector);
 
   inputElements.forEach((inputElement) => {
-    if (formElement.querySelector(`.${config.errorClass}`)) {
-      hideInputError(formElement, inputElement, config);
-    }
+    hideInputError(formElement, inputElement, config);
   });
-  disableButton(formElement, config);
+
+  disableButton(submitButton, config);
 }
